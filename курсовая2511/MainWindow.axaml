@@ -4,29 +4,5 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="курсовая2511.MainWindow"
-        Title="computertech" Width="1200" Height="700" WindowsStartupLocation=""Center>
-        <Window.DataContext> <vm:MainViewModel>
-        </Window.DataContext>
-        <Windows.Style>
-        <Style Selector="Button.nav-button">
-        <Setter Property="Background" Value="#2C3E50"/>
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="Margin" value="0,5"/>
-        <Setter Property="Pading" value="15,10"/>
-        <Setter Property="HorizontalContentAligment" Value="left"//>
-        <Setter Property="FrontSize" value="14"/>
-        </Style>
+        Title="computertech"
 
-        </Windows.Style>
-<Grid ColumnDefinitions="250,*">
-<Border Grid.Column="0" Bachground="1A25F"
-<DockPanel>
-<Border DockPanel.Dock="Top" Background="2C3E50" Padding="15">
-<StackPanel>
-<TextBox Text="Учет техники" FrontSize="18"
-</StackPanel>
-</Border>
-</DockPanel>
-</Grid>
-     
-</Window>
