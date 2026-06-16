@@ -15,9 +15,18 @@
         <Setter Property="Pading" value="15,10"/>
         <Setter Property="HorizontalContentAligment" Value="left"//>
         <Setter Property="FrontSize" value="14"/>
-
         </Style>
-        
+
         </Windows.Style>
+<Grid ColumnDefinitions="250,*">
+<Border Grid.Column="0" Bachground="1A25F"
+<DockPanel>
+<Border DockPanel.Dock="Top" Background="2C3E50" Padding="15">
+<StackPanel>
+<TextBox Text="Учет техники" FrontSize="18"
+</StackPanel>
+</Border>
+</DockPanel>
+</Grid>
      
 </Window>
