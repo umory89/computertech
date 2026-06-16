@@ -4,6 +4,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="курсовая2511.MainWindow"
-        Title="курсовая2511">
-    Welcome to Avalonia!
+        Title="computertech" Width="1200" Height="700" WindowsStartupLocation=""Center>
+        <Window.DataContext> <vm:MainViewModel>
+        </Window.DataContext>
+        <Windows.Style>
+        <Style Selector="Button.nav-button">
+        <Setter Property="Background" Value="#2C3E50"/>
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Margin" value="0,5"/>
+        <Setter Property="Pading" value="15,10"/>
+        <Setter Property="HorizontalContentAligment" Value="left"//>
+        <Setter Property="FrontSize" value="14"/>
+
+        </Style>
+        
+        </Windows.Style>
+     
 </Window>
