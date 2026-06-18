@@ -8,5 +8,9 @@ namespace курсовая2511.Models
 {
     internal class EquipmentType
     {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public string Description { get; set; }
     }
 }
