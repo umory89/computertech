@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml; 
 
 namespace курсовая2511
 {
@@ -6,7 +7,7 @@ namespace курсовая2511
     {
         public MainWindow()
         {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
         }
     }
 }
