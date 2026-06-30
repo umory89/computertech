@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using курсовая2511.TechAccounting.Application.Dtos.DTOs;
+using курсовая2511.TechAccounting.Application.DTOs;
 
-namespace курсовая2511.TechAccounting.Application.Interfaces
+namespace курсовая2511.TechAccounting.Application.Dtos.Interfaces
 {
-    internal class IAssignmentService
+    public interface IAssignmentService
     {
+        Task<IEnumerable<AssignmentDto>> GetAllAsync();
+        Task CreateAsync(AssignmentDto dto);
+        Task ReturnEquipmentAsync(Guid id, string condition);
     }
 }
+

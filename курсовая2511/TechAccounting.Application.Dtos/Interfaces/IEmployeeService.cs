@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using курсовая2511.TechAccounting.Application.Dtos.DTOs;
 
-namespace курсовая2511.TechAccounting.Application.Interfaces
+namespace курсовая2511.TechAccounting.Application.Dtos.Interfaces
 {
-    internal class IEmployeeService
+    public interface IEmployeeService
     {
+        Task<IEnumerable<EmployeeDto>> GetAllAsync();
+        Task<EmployeeDto?> GetByIdAsync(Guid id);
+        Task CreateAsync(EmployeeDto dto);
+        Task UpdateAsync(EmployeeDto dto);
+        Task DeleteAsync(Guid id);
     }
 }

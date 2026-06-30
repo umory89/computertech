@@ -11,11 +11,11 @@ namespace курсовая2511.TechAccounting.Application.DTOs
         public DateTime? ReturnDate { get; set; }
 
 
-        public string ConditionAtIssue { get; set; } = string.Empty;
+        public string ConditionAtIssue { get; set; } 
 
-        public string ConditionAtReturn { get; set; } = string.Empty;
+        public string ConditionAtReturn { get; set; } 
 
-        public string Notes { get; set; } = string.Empty;
+        public string Notes { get; set; } 
 
       
         public Guid EmployeeId { get; set; }

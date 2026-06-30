@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using курсовая2511.TechAccounting.Application.Dtos.DTOs;
 
-namespace курсовая2511.TechAccounting.Application.Interfaces
+namespace курсовая2511.TechAccounting.Application.Dtos.Interfaces
 {
-    internal class IReportService
+    public interface IReportService
     {
+        Task<EquipmentSummaryDto> GetEquipmentSummaryAsync();
     }
 }
