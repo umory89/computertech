@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml; 
+using Avalonia.Markup.Xaml;
 
 namespace курсовая2511
 {
