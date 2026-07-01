@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 
 namespace курсовая2511
@@ -9,5 +10,9 @@ namespace курсовая2511
         {
             AvaloniaXamlLoader.Load(this);
         }
+        
     }
+
 }
+
+

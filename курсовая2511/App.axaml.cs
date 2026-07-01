@@ -1,6 +1,8 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using System;
 
 namespace курсовая2511
 {
@@ -15,22 +17,43 @@ namespace курсовая2511
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Инициализируем ваш контекст базы данных LocalDB по точному глобальному пути
-                var context = new global::TechAccounting.Data.AppDbContext();
-
-                // Создаем прикладные сервисы по точным путям
-                var authService = new global::курсовая2511.TechAccounting.Application.Dtos.Services.AuthService(context);
-                var reportService = new global::курсовая2511.TechAccounting.Application.Dtos.Services.ReportService(context);
-                var equipmentService = new global::курсовая2511.TechAccounting.Application.Dtos.Services.EquipmentService(context);
-
-                // Передаем все сервисы в единую AuthViewModel
-                var authViewModel = new global::курсовая2511.AuthViewModel(authService, reportService, equipmentService);
-
-                desktop.MainWindow = new MainWindow
+                try
                 {
-                    DataContext = authViewModel
-                };
+                    var context = new global::TechAccounting.Data.AppDbContext();
+
+                    // Гарантированно создаёт базу и таблицы, если их ещё нет
+                    // (если используешь миграции — замени на context.Database.Migrate())
+                    context.Database.EnsureCreated();
+
+                    var authService = new курсовая2511.TechAccounting.Application.Dtos.Services.AuthService(context);
+                    var reportService = new курсовая2511.TechAccounting.Application.Dtos.Services.ReportService(context);
+                    var equipmentService = new курсовая2511.TechAccounting.Application.Dtos.Services.EquipmentService(context);
+
+                    var authViewModel = new AuthViewModel(authService, reportService, equipmentService);
+
+                    desktop.MainWindow = new MainWindow
+                    {
+                        DataContext = authViewModel
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Раньше при ошибке здесь приложение либо не стартовало,
+                    // либо оставалось на старой сборке. Теперь ошибка видна сразу.
+                    desktop.MainWindow = new Window
+                    {
+                        Width = 600,
+                        Height = 300,
+                        Content = new TextBlock
+                        {
+                            Text = "Ошибка запуска приложения:\n\n" + ex,
+                            Margin = new Avalonia.Thickness(20),
+                            TextWrapping = Avalonia.Media.TextWrapping.Wrap
+                        }
+                    };
+                }
             }
+
             base.OnFrameworkInitializationCompleted();
         }
     }

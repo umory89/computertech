@@ -9,9 +9,11 @@ namespace курсовая2511
 {
     public class AuthViewModel : INotifyPropertyChanged
     {
-        private readonly TechAccounting.Application.Dtos.Services.AuthService _authService;
-        private readonly TechAccounting.Application.Dtos.Services.ReportService _reportService;
-        private readonly TechAccounting.Application.Dtos.Services.EquipmentService _equipmentService;
+        // ВАЖНО: namespace здесь должен ТОЧНО совпадать с тем,
+        // что используется в App.axaml.cs при создании сервисов.
+        private readonly курсовая2511.TechAccounting.Application.Dtos.Services.AuthService _authService;
+        private readonly курсовая2511.TechAccounting.Application.Dtos.Services.ReportService _reportService;
+        private readonly курсовая2511.TechAccounting.Application.Dtos.Services.EquipmentService _equipmentService;
 
         // Поля авторизации и регистрации
         private string _username = string.Empty;
@@ -32,7 +34,8 @@ namespace курсовая2511
         private int _underRepairCount;
 
         // Коллекция для вывода всей техники предприятия
-        private IEnumerable<TechAccounting.Application.Dtos.DTOs.EquipmentDto> _equipmentItems = new List<TechAccounting.Application.Dtos.DTOs.EquipmentDto>();
+        private IEnumerable<курсовая2511.TechAccounting.Application.Dtos.DTOs.EquipmentDto> _equipmentItems
+            = new List<курсовая2511.TechAccounting.Application.Dtos.DTOs.EquipmentDto>();
 
         // Свойства Binding
         public string Username { get => _username; set { _username = value; OnPropertyChanged(); } }
@@ -50,7 +53,7 @@ namespace курсовая2511
         public int IssuedCount { get => _issuedCount; set { _issuedCount = value; OnPropertyChanged(); } }
         public int UnderRepairCount { get => _underRepairCount; set { _underRepairCount = value; OnPropertyChanged(); } }
 
-        public IEnumerable<TechAccounting.Application.Dtos.DTOs.EquipmentDto> EquipmentItems
+        public IEnumerable<курсовая2511.TechAccounting.Application.Dtos.DTOs.EquipmentDto> EquipmentItems
         {
             get => _equipmentItems;
             set { _equipmentItems = value; OnPropertyChanged(); }
@@ -65,27 +68,23 @@ namespace курсовая2511
         public ICommand SelectReportsTabCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        // Конструктор со всеми необходимыми сервисами
         public AuthViewModel(
-            TechAccounting.Application.Dtos.Services.AuthService authService,
-            TechAccounting.Application.Dtos.Services.ReportService reportService,
-            TechAccounting.Application.Dtos.Services.EquipmentService equipmentService)
+            курсовая2511.TechAccounting.Application.Dtos.Services.AuthService authService,
+            курсовая2511.TechAccounting.Application.Dtos.Services.ReportService reportService,
+            курсовая2511.TechAccounting.Application.Dtos.Services.EquipmentService equipmentService)
         {
             _authService = authService;
             _reportService = reportService;
             _equipmentService = equipmentService;
 
-            // Привязка команд к методам
             LoginCommand = new TabRelayCommand(async () => await ExecuteLoginAsync());
             RegisterCommand = new TabRelayCommand(async () => await ExecuteRegisterAsync());
             ToggleModeCommand = new TabRelayCommand(() => { IsRegisterMode = !IsRegisterMode; StatusMessage = ""; });
 
-            // Кнопки бокового меню администратора
             SelectEquipmentTabCommand = new TabRelayCommand(() => CurrentTab = 0);
             SelectAssignmentsTabCommand = new TabRelayCommand(() => CurrentTab = 1);
             SelectReportsTabCommand = new TabRelayCommand(() => CurrentTab = 2);
 
-            // Выход из учетной записи
             LogoutCommand = new TabRelayCommand(() =>
             {
                 IsLoggedIn = false;
@@ -95,7 +94,6 @@ namespace курсовая2511
             });
         }
 
-        // Метод Входа в систему
         private async Task ExecuteLoginAsync()
         {
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
@@ -105,28 +103,30 @@ namespace курсовая2511
             }
 
             StatusMessage = "Проверка...";
-            var user = await _authService.LoginAsync(Username, Password);
 
-            if (user != null)
+            try
             {
-                StatusMessage = string.Empty;
+                var user = await _authService.LoginAsync(Username, Password);
 
-                // 1. Считываем данные из БД для дашборда аналитики
-                await LoadDashboardStatsAsync();
-
-                // 2. Считываем весь список ИТ-оборудования предприятия для вывода в таблицу
-                EquipmentItems = await _equipmentService.GetAllAsync();
-
-                // 3. Отдаем команду XAML-интерфейсу скрыть форму входа и развернуть панель администратора
-                IsLoggedIn = true;
+                if (user != null)
+                {
+                    StatusMessage = string.Empty;
+                    await LoadDashboardStatsAsync();
+                    EquipmentItems = await _equipmentService.GetAllAsync();
+                    IsLoggedIn = true;
+                }
+                else
+                {
+                    StatusMessage = "Неверный логин или пароль.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                StatusMessage = "Неверный логин или пароль.";
+                // Если раньше падало молча — теперь увидишь причину прямо в интерфейсе
+                StatusMessage = "Ошибка входа: " + ex.Message;
             }
         }
 
-        // Метод Регистрации нового сотрудника/аккаунта
         private async Task ExecuteRegisterAsync()
         {
             if (string.IsNullOrWhiteSpace(RegUsername) || string.IsNullOrWhiteSpace(RegEmail) || string.IsNullOrWhiteSpace(RegPassword))
@@ -136,20 +136,27 @@ namespace курсовая2511
             }
 
             StatusMessage = "Регистрация...";
-            var result = await _authService.RegisterAsync(RegUsername, RegEmail, RegPassword);
-            StatusMessage = result.Message;
 
-            if (result.IsSuccess)
+            try
             {
-                Username = RegUsername;
-                IsRegisterMode = false;
-                RegUsername = string.Empty;
-                RegEmail = string.Empty;
-                RegPassword = string.Empty;
+                var result = await _authService.RegisterAsync(RegUsername, RegEmail, RegPassword);
+                StatusMessage = result.Message;
+
+                if (result.IsSuccess)
+                {
+                    Username = RegUsername;
+                    IsRegisterMode = false;
+                    RegUsername = string.Empty;
+                    RegEmail = string.Empty;
+                    RegPassword = string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = "Ошибка регистрации: " + ex.Message;
             }
         }
 
-        // Загрузка цифр дашборда из вашего ReportService
         public async Task LoadDashboardStatsAsync()
         {
             try
@@ -161,14 +168,12 @@ namespace курсовая2511
             }
             catch
             {
-                // Стабильные дефолтные значения (заглушка), если БД временно пустая
-                InStockCount = 45;
-                IssuedCount = 120;
-                UnderRepairCount = 5;
+                InStockCount = 0;
+                IssuedCount = 0;
+                UnderRepairCount = 0;
             }
         }
 
-        // Реализация интерфейса уведомления интерфейса об изменении свойств
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

@@ -1,9 +1,13 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="курсовая2511.App">
+             x:Class="курсовая2511.App"
+             RequestedThemeVariant="Dark">
 
     <Application.Styles>
-        <!-- Временно пусто, чтобы проверить запуск без ошибок компиляции стилей -->
+        <!-- Без этой строки у TextBox (и у большинства других контролов)
+             нет визуального шаблона вообще — поэтому поля ввода
+             физически не отрисовываются, хотя в XAML они есть. -->
+        <FluentTheme />
     </Application.Styles>
-    
+
 </Application>
