@@ -14,8 +14,10 @@ namespace курсовая2511.Models
         public string Phone { get; set; }
         public DateTime HireDate { get; set; }
         public bool IsActive { get; set; }
-        public Guid UserId { get; set; }
-        public User User { get; set; }
+
+    
+        public Guid? UserId { get; set; }
+        public User? User { get; set; }
 
         public ICollection<EquipmentAssignment> Assignments { get; set; }
         public ICollection<AssignmentHistory> History { get; set; }

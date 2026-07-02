@@ -13,44 +13,18 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly AppDbContext _context;
-
         public EmployeeService(AppDbContext context) => _context = context;
 
         public async Task<IEnumerable<EmployeeDto>> GetAllAsync()
         {
             var items = await _context.Employees.ToListAsync();
-            return items.Select(e => new EmployeeDto
-            {
-                Id = e.Id,
-                FirstName = e.FirstName,
-                LastName = e.LastName,
-                Department = e.Department,
-                Position = e.Position,
-                Email = e.Email,
-                Phone = e.Phone,
-                HireDate = e.HireDate,
-                IsActive = e.IsActive,
-                UserId = e.UserId
-            });
+            return items.Select(ToDto);
         }
 
         public async Task<EmployeeDto?> GetByIdAsync(Guid id)
         {
             var e = await _context.Employees.FindAsync(id);
-            if (e == null) return null;
-            return new EmployeeDto
-            {
-                Id = e.Id,
-                FirstName = e.FirstName,
-                LastName = e.LastName,
-                Department = e.Department,
-                Position = e.Position,
-                Email = e.Email,
-                Phone = e.Phone,
-                HireDate = e.HireDate,
-                IsActive = e.IsActive,
-                UserId = e.UserId
-            };
+            return e == null ? null : ToDto(e);
         }
 
         public async Task CreateAsync(EmployeeDto dto)
@@ -58,15 +32,16 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
             _context.Employees.Add(new Employee
             {
                 Id = dto.Id == Guid.Empty ? Guid.NewGuid() : dto.Id,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Department = dto.Department,
-                Position = dto.Position,
-                Email = dto.Email,
-                Phone = dto.Phone,
-                HireDate = dto.HireDate,
-                IsActive = dto.IsActive,
-                UserId = dto.UserId
+                FirstName = dto.FirstName ?? string.Empty,
+                LastName = dto.LastName ?? string.Empty,
+                Department = dto.Department ?? string.Empty,
+                Position = dto.Position ?? string.Empty,
+                Email = dto.Email ?? string.Empty,
+                Phone = dto.Phone ?? string.Empty,
+                HireDate = dto.HireDate == default ? DateTime.Now : dto.HireDate,
+                IsActive = true,
+      
+                UserId = (dto.UserId == Guid.Empty) ? (Guid?)null : dto.UserId
             });
             await _context.SaveChangesAsync();
         }
@@ -88,5 +63,19 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
             var entity = await _context.Employees.FindAsync(id);
             if (entity != null) { _context.Employees.Remove(entity); await _context.SaveChangesAsync(); }
         }
+
+        private static EmployeeDto ToDto(Employee e) => new EmployeeDto
+        {
+            Id = e.Id,
+            FirstName = e.FirstName,
+            LastName = e.LastName,
+            Department = e.Department,
+            Position = e.Position,
+            Email = e.Email,
+            Phone = e.Phone,
+            HireDate = e.HireDate,
+            IsActive = e.IsActive,
+            UserId = e.UserId ?? Guid.Empty
+        };
     }
 }

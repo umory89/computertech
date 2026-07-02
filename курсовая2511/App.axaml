@@ -4,9 +4,7 @@
              RequestedThemeVariant="Dark">
 
     <Application.Styles>
-        <!-- Без этой строки у TextBox (и у большинства других контролов)
-             нет визуального шаблона вообще — поэтому поля ввода
-             физически не отрисовываются, хотя в XAML они есть. -->
+
         <FluentTheme />
     </Application.Styles>
 

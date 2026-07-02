@@ -19,29 +19,11 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
         public async Task<IEnumerable<EquipmentDto>> GetAllAsync()
         {
             var items = await _context.Equipment.ToListAsync();
-            return items.Select(e => new EquipmentDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                SerialNumber = e.SerialNumber,
-                InventoryNumber = e.InventoryNumber,
-                Manufacturer = e.Manufacturer,
-                Model = e.Model,
-                PurchaseDate = e.PurchaseDate,
-                Price = e.Price,
-                Location = e.Location,
-                Status = e.Status,
-                Notes = e.Notes,
-                WarrantyMonths = e.WarrantyMonths,
-                WarrantyEndDate = e.WarrantyEndDate,
-                EquipmentTypeId = e.EquipmentTypeId,
-                SupplierId = e.SupplierId
-            });
+            return items.Select(ToDto);
         }
 
         public async Task<IEnumerable<EquipmentDetailDto>> GetAllDetailsAsync()
         {
- 
             var items = await _context.Equipment
                 .Include(e => e.EquipmentType)
                 .Include(e => e.Supplier)
@@ -65,29 +47,33 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
         public async Task<EquipmentDto?> GetByIdAsync(Guid id)
         {
             var e = await _context.Equipment.FindAsync(id);
-            if (e == null) return null;
-            return new EquipmentDto { Id = e.Id, Name = e.Name, SerialNumber = e.SerialNumber, InventoryNumber = e.InventoryNumber, Status = e.Status, EquipmentTypeId = e.EquipmentTypeId, SupplierId = e.SupplierId };
+            return e == null ? null : ToDto(e);
         }
 
         public async Task CreateAsync(EquipmentDto dto)
         {
+            var inventoryNumber = string.IsNullOrWhiteSpace(dto.InventoryNumber)
+                ? "AUTO-" + DateTime.Now.Ticks
+                : dto.InventoryNumber;
+
             _context.Equipment.Add(new Equipment
             {
                 Id = dto.Id == Guid.Empty ? Guid.NewGuid() : dto.Id,
-                Name = dto.Name,
-                SerialNumber = dto.SerialNumber,
-                InventoryNumber = dto.InventoryNumber,
-                Manufacturer = dto.Manufacturer,
-                Model = dto.Model,
-                PurchaseDate = dto.PurchaseDate,
+                Name = dto.Name ?? string.Empty,
+                SerialNumber = dto.SerialNumber ?? string.Empty,
+                InventoryNumber = inventoryNumber,
+                Manufacturer = dto.Manufacturer ?? string.Empty,
+                Model = dto.Model ?? string.Empty,
+                PurchaseDate = dto.PurchaseDate == default ? DateTime.Now : dto.PurchaseDate,
                 Price = dto.Price,
-                Location = dto.Location,
+                Location = dto.Location ?? string.Empty,
                 Status = "InStock",
-                Notes = dto.Notes,
+                Notes = dto.Notes ?? string.Empty,
                 WarrantyMonths = dto.WarrantyMonths,
                 WarrantyEndDate = dto.WarrantyEndDate,
+                CreatedAt = DateTime.Now,
                 EquipmentTypeId = dto.EquipmentTypeId,
-                SupplierId = dto.SupplierId
+                SupplierId = dto.SupplierId == Guid.Empty ? null : dto.SupplierId
             });
             await _context.SaveChangesAsync();
         }
@@ -108,5 +94,24 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
             var entity = await _context.Equipment.FindAsync(id);
             if (entity != null) { _context.Equipment.Remove(entity); await _context.SaveChangesAsync(); }
         }
+
+        private static EquipmentDto ToDto(Equipment e) => new EquipmentDto
+        {
+            Id = e.Id,
+            Name = e.Name,
+            SerialNumber = e.SerialNumber,
+            InventoryNumber = e.InventoryNumber,
+            Manufacturer = e.Manufacturer,
+            Model = e.Model,
+            PurchaseDate = e.PurchaseDate,
+            Price = e.Price,
+            Location = e.Location,
+            Status = e.Status,
+            Notes = e.Notes,
+            WarrantyMonths = e.WarrantyMonths,
+            WarrantyEndDate = e.WarrantyEndDate,
+            EquipmentTypeId = e.EquipmentTypeId,
+            SupplierId = e.SupplierId ?? Guid.Empty
+        };
     }
 }

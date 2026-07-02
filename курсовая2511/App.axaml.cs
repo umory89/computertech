@@ -28,7 +28,7 @@ namespace курсовая2511
                     var employeeService = new курсовая2511.TechAccounting.Application.Dtos.Services.EmployeeService(context);
                     var assignmentService = new курсовая2511.TechAccounting.Application.Dtos.Services.AssignmentService(context);
 
-                    var authViewModel = new AuthViewModel(authService, reportService, equipmentService, employeeService, assignmentService);
+                    var authViewModel = new AuthViewModel(authService, reportService, equipmentService, employeeService, assignmentService, context);
 
                     desktop.MainWindow = new MainWindow
                     {

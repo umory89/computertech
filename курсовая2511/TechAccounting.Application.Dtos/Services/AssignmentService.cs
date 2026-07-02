@@ -14,7 +14,6 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
     public class AssignmentService : IAssignmentService
     {
         private readonly AppDbContext _context;
-
         public AssignmentService(AppDbContext context) => _context = context;
 
         public async Task<IEnumerable<AssignmentDto>> GetAllAsync()
@@ -43,8 +42,10 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
             {
                 Id = Guid.NewGuid(),
                 AssignedDate = DateTime.UtcNow,
-                ConditionAtIssue = dto.ConditionAtIssue,
-                Notes = dto.Notes,
+          
+                ConditionAtIssue = dto.ConditionAtIssue ?? string.Empty,
+                ConditionAtReturn = string.Empty,
+                Notes = dto.Notes ?? string.Empty,
                 EmployeeId = dto.EmployeeId,
                 EquipmentId = dto.EquipmentId
             };
@@ -61,7 +62,7 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
                 ActionType = "Выдача",
                 ActionDate = DateTime.UtcNow,
                 PerformedBy = "Admin",
-                Details = $"Выдано сотруднику. Состояние: {dto.ConditionAtIssue}"
+                Details = $"Выдано сотруднику. Состояние: {assignment.ConditionAtIssue}"
             });
 
             await _context.SaveChangesAsync();
@@ -74,7 +75,7 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
                 throw new InvalidOperationException("Операция невозможна.");
 
             assignment.ReturnDate = DateTime.UtcNow;
-            assignment.ConditionAtReturn = condition;
+            assignment.ConditionAtReturn = condition ?? string.Empty;
 
             var equipment = await _context.Equipment.FindAsync(assignment.EquipmentId);
             if (equipment != null) equipment.Status = "InStock";
@@ -88,7 +89,7 @@ namespace курсовая2511.TechAccounting.Application.Dtos.Services
                 ActionType = "Возврат",
                 ActionDate = DateTime.UtcNow,
                 PerformedBy = "Admin",
-                Details = $"Возвращено на склад. Состояние: {condition}"
+                Details = $"Возвращено на склад. Состояние: {assignment.ConditionAtReturn}"
             });
 
             await _context.SaveChangesAsync();

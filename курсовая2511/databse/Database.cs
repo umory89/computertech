@@ -14,6 +14,7 @@ namespace TechAccounting.Data
         public DbSet<EquipmentAssignment> EquipmentAssignments { get; set; }
         public DbSet<AssignmentHistory> AssignmentHistories { get; set; }
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -100,6 +101,7 @@ namespace TechAccounting.Data
                       .HasForeignKey(e => e.EmployeeId)
                       .OnDelete(DeleteBehavior.SetNull);
             });
+
 
             modelBuilder.Entity<EquipmentType>().HasData(
                 new EquipmentType { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Computer", Icon = "", Description = "ПК" },
