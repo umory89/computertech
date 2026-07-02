@@ -14,12 +14,10 @@ namespace TechAccounting.Data
         public DbSet<EquipmentAssignment> EquipmentAssignments { get; set; }
         public DbSet<AssignmentHistory> AssignmentHistories { get; set; }
 
- 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-         
                 optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=TechAccountingDb;Trusted_Connection=True;");
             }
         }
@@ -103,7 +101,6 @@ namespace TechAccounting.Data
                       .OnDelete(DeleteBehavior.SetNull);
             });
 
-        
             modelBuilder.Entity<EquipmentType>().HasData(
                 new EquipmentType { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Computer", Icon = "", Description = "ПК" },
                 new EquipmentType { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Name = "Laptop", Icon = "", Description = "Ноутбук" },
@@ -117,10 +114,7 @@ namespace TechAccounting.Data
                 new EquipmentType { Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), Name = "Switch", Icon = "", Description = "Приставка" },
                 new EquipmentType { Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), Name = "Periphery", Icon = "", Description = "Периферия" },
                 new EquipmentType { Id = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"), Name = "Other", Icon = "", Description = "Прочее" }
-            
-
-            ); 
-        } 
-    } 
-} 
-
+            );
+        }
+    }
+}

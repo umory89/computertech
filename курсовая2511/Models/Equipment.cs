@@ -14,7 +14,7 @@ namespace курсовая2511.Models
         public DateTime PurchaseDate { get; set; }
         public decimal Price { get; set; }
         public string Location { get; set; }
-        public string Status { get; set; } 
+        public string Status { get; set; }
         public string Notes { get; set; }
         public int WarrantyMonths { get; set; }
         public DateTime? WarrantyEndDate { get; set; }

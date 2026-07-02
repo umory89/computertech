@@ -9,7 +9,6 @@
         Background="#1E1E1E">
 
 	<Window.Styles>
-		<!-- Стиль только для кнопок бокового меню, TextBox он не касается -->
 		<Style Selector="Button.menu-btn">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -17,10 +16,6 @@
 			<Setter Property="CornerRadius" Value="5"/>
 		</Style>
 
-		<!-- Явный стиль для полей ввода формы логина/регистрации.
-		     Задаём его отдельным классом "auth-input", чтобы никакой
-		     другой глобальный стиль в App.axaml случайно не перекрыл
-		     шаблон TextBox и не убрал текстовый слой. -->
 		<Style Selector="TextBox.auth-input">
 			<Setter Property="Background" Value="#3A3A3C"/>
 			<Setter Property="Foreground" Value="White"/>
@@ -35,81 +30,58 @@
 			<Setter Property="IsReadOnly" Value="False"/>
 			<Setter Property="IsHitTestVisible" Value="True"/>
 		</Style>
+
+		<Style Selector="ComboBox.auth-input">
+			<Setter Property="Background" Value="#3A3A3C"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="BorderBrush" Value="#007ACC"/>
+			<Setter Property="Height" Value="35"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		</Style>
 	</Window.Styles>
 
 	<Grid>
 		<!-- БЛОК 1: ОКНО ВХОДА И РЕГИСТРАЦИИ -->
 		<Border IsVisible="{Binding !IsLoggedIn}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400" Padding="30" Background="#252526" CornerRadius="8" BorderBrush="#3F3F46" BorderThickness="1">
 			<Grid>
-
-				<!-- ЭКРАН ВХОДА -->
 				<StackPanel Spacing="15" IsVisible="{Binding !IsRegisterMode}">
 					<TextBlock Text="Вход в систему" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-
 					<StackPanel Spacing="5">
 						<TextBlock Text="Логин:" Foreground="#858585" FontSize="12"/>
-						<TextBox Classes="auth-input"
-                                 Name="LoginUsernameBox"
-                                 Text="{Binding Username, Mode=TwoWay}"
-                                 Watermark="Введите логин..."/>
+						<TextBox Classes="auth-input" Text="{Binding Username, Mode=TwoWay}" Watermark="Введите логин..."/>
 					</StackPanel>
-
 					<StackPanel Spacing="5">
 						<TextBlock Text="Пароль:" Foreground="#858585" FontSize="12"/>
-						<TextBox Classes="auth-input"
-                                 Name="LoginPasswordBox"
-                                 Text="{Binding Password, Mode=TwoWay}"
-                                 PasswordChar="*"
-                                 Watermark="Введите пароль..."/>
+						<TextBox Classes="auth-input" Text="{Binding Password, Mode=TwoWay}" PasswordChar="*" Watermark="Введите пароль..."/>
 					</StackPanel>
-
 					<TextBlock Text="{Binding StatusMessage}" Foreground="#FF453A" FontSize="12" HorizontalAlignment="Center" TextWrapping="Wrap" MinHeight="20"/>
-
 					<Button Content="Войти" Command="{Binding LoginCommand}" Background="#007ACC" Foreground="White" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Padding="10" FontWeight="Bold" CornerRadius="5" Height="40"/>
 					<Button Content="Создать аккаунт" Command="{Binding ToggleModeCommand}" Background="Transparent" Foreground="#858585" HorizontalAlignment="Center" FontSize="12"/>
 				</StackPanel>
 
-				<!-- ЭКРАН РЕГИСТРАЦИИ -->
 				<StackPanel Spacing="15" IsVisible="{Binding IsRegisterMode}">
 					<TextBlock Text="Регистрация" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-
 					<StackPanel Spacing="5">
 						<TextBlock Text="Электронная почта:" Foreground="#858585" FontSize="12"/>
-						<TextBox Classes="auth-input"
-                                 Name="RegEmailBox"
-                                 Text="{Binding RegEmail, Mode=TwoWay}"
-                                 Watermark="example@mail.com"/>
+						<TextBox Classes="auth-input" Text="{Binding RegEmail, Mode=TwoWay}" Watermark="example@mail.com"/>
 					</StackPanel>
-
 					<StackPanel Spacing="5">
 						<TextBlock Text="Логин:" Foreground="#858585" FontSize="12"/>
-						<TextBox Classes="auth-input"
-                                 Name="RegUsernameBox"
-                                 Text="{Binding RegUsername, Mode=TwoWay}"
-                                 Watermark="Придумайте логин..."/>
+						<TextBox Classes="auth-input" Text="{Binding RegUsername, Mode=TwoWay}" Watermark="Придумайте логин..."/>
 					</StackPanel>
-
 					<StackPanel Spacing="5">
 						<TextBlock Text="Пароль:" Foreground="#858585" FontSize="12"/>
-						<TextBox Classes="auth-input"
-                                 Name="RegPasswordBox"
-                                 Text="{Binding RegPassword, Mode=TwoWay}"
-                                 PasswordChar="*"
-                                 Watermark="Придумайте пароль..."/>
+						<TextBox Classes="auth-input" Text="{Binding RegPassword, Mode=TwoWay}" PasswordChar="*" Watermark="Придумайте пароль..."/>
 					</StackPanel>
-
 					<TextBlock Text="{Binding StatusMessage}" Foreground="#4CD964" FontSize="12" HorizontalAlignment="Center" TextWrapping="Wrap" MinHeight="20"/>
-
 					<Button Content="Зарегистрироваться" Command="{Binding RegisterCommand}" Background="#4CD964" Foreground="Black" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Padding="10" FontWeight="Bold" CornerRadius="5" Height="40"/>
 					<Button Content="Уже есть аккаунт? Войти" Command="{Binding ToggleModeCommand}" Background="Transparent" Foreground="#858585" HorizontalAlignment="Center" FontSize="12"/>
 				</StackPanel>
-
 			</Grid>
 		</Border>
 
 		<!-- БЛОК 2: ПАНЕЛЬ АДМИНИСТРАТОРА -->
 		<Grid IsVisible="{Binding IsLoggedIn}" ColumnDefinitions="240, *">
-			<!-- ЛЕВАЯ ПАНЕЛЬ С МЕНЮ -->
 			<Border Grid.Column="0" Background="#252526" BorderBrush="#3F3F46" BorderThickness="0,0,1,0">
 				<Grid RowDefinitions="Auto, *, Auto">
 					<StackPanel Grid.Row="0" Margin="20,25,20,25" Orientation="Horizontal" Spacing="10">
@@ -152,7 +124,6 @@
 				</Grid>
 			</Border>
 
-			<!-- ПРАВАЯ ЧАСТЬ С КАРТОЧКАМИ -->
 			<Grid Grid.Column="1" RowDefinitions="Auto, *">
 				<Border Grid.Row="0" Background="#1E1E1E" Padding="20">
 					<Grid ColumnDefinitions="*, *, *">
@@ -177,7 +148,6 @@
 					</Grid>
 				</Border>
 
-				<!-- КОНТЕНТ ВКЛАДОК -->
 				<Border Grid.Row="1" Background="#121212" CornerRadius="12,0,0,0" Padding="20">
 					<Carousel SelectedIndex="{Binding CurrentTab}">
 						<!-- Вкладка 0: Список техники -->
@@ -196,19 +166,76 @@
 							</ListBox>
 						</Grid>
 
-						<!-- Вкладка 1: Выдача -->
-						<Grid RowDefinitions="Auto, *">
-							<TextBlock Grid.Row="0" Text="Регистрация выдачи техники сотрудникам" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
-							<Border Grid.Row="1" Background="#1E1E1E" CornerRadius="8" Padding="20">
-								<StackPanel Spacing="10" Width="400" HorizontalAlignment="Left">
-									<TextBlock Text="Оформить выдачу техники" FontSize="14" FontWeight="Bold" Foreground="White"/>
-									<TextBox Classes="auth-input" Watermark="ID Сотрудника (Guid)"/>
-									<TextBox Classes="auth-input" Watermark="ID Оборудования (Guid)"/>
-									<TextBox Classes="auth-input" Watermark="Состояние при выдаче"/>
-									<Button Content="Зафиксировать выдачу" Background="#2196F3" Foreground="White" Height="40"/>
-								</StackPanel>
-							</Border>
-						</Grid>
+						<!-- Вкладка 1: Выдача / Возврат -->
+						<ScrollViewer>
+							<StackPanel Spacing="20">
+
+								<!-- Блок выдачи -->
+								<Grid RowDefinitions="Auto, *">
+									<TextBlock Grid.Row="0" Text="Регистрация выдачи техники сотрудникам" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
+									<Border Grid.Row="1" Background="#1E1E1E" CornerRadius="8" Padding="20">
+										<StackPanel Spacing="10" Width="420" HorizontalAlignment="Left">
+											<TextBlock Text="Оформить выдачу техники" FontSize="14" FontWeight="Bold" Foreground="White"/>
+
+											<TextBlock Text="Сотрудник:" Foreground="#858585" FontSize="12"/>
+											<ComboBox Classes="auth-input" ItemsSource="{Binding EmployeeItems}" SelectedItem="{Binding SelectedEmployee}" PlaceholderText="Выберите сотрудника...">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<StackPanel Orientation="Horizontal" Spacing="6">
+															<TextBlock Text="{Binding LastName}"/>
+															<TextBlock Text="{Binding FirstName}"/>
+															<TextBlock Text="—" Foreground="#858585"/>
+															<TextBlock Text="{Binding Position}" Foreground="#858585"/>
+														</StackPanel>
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+
+											<TextBlock Text="Техника (только свободная):" Foreground="#858585" FontSize="12"/>
+											<ComboBox Classes="auth-input" ItemsSource="{Binding AvailableEquipmentItems}" SelectedItem="{Binding SelectedEquipmentForIssue}" PlaceholderText="Выберите технику...">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Name}"/>
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+
+											<TextBlock Text="Состояние при выдаче:" Foreground="#858585" FontSize="12"/>
+											<TextBox Classes="auth-input" Text="{Binding IssueCondition}" Watermark="Например: Норма"/>
+
+											<TextBlock Text="{Binding AssignmentStatusMessage}" Foreground="#4CD964" FontSize="12" TextWrapping="Wrap" MinHeight="20"/>
+
+											<Button Content="Зафиксировать выдачу" Command="{Binding AssignEquipmentCommand}" Background="#2196F3" Foreground="White" Height="40" HorizontalContentAlignment="Center" FontWeight="Bold" CornerRadius="5"/>
+										</StackPanel>
+									</Border>
+								</Grid>
+
+								<!-- Блок возврата -->
+								<Grid RowDefinitions="Auto, *">
+									<TextBlock Grid.Row="0" Text="Приём техники обратно на склад" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
+									<Border Grid.Row="1" Background="#1E1E1E" CornerRadius="8" Padding="20">
+										<StackPanel Spacing="10" Width="420" HorizontalAlignment="Left">
+											<TextBlock Text="Активные выдачи:" Foreground="#858585" FontSize="12"/>
+											<ComboBox Classes="auth-input" ItemsSource="{Binding ActiveAssignments}" SelectedItem="{Binding SelectedActiveAssignment}" PlaceholderText="Выберите выдачу для возврата...">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding DisplayText}"/>
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+
+											<TextBlock Text="Состояние при возврате:" Foreground="#858585" FontSize="12"/>
+											<TextBox Classes="auth-input" Text="{Binding ReturnCondition}" Watermark="Например: Норма"/>
+
+											<TextBlock Text="{Binding ReturnStatusMessage}" Foreground="#4CD964" FontSize="12" TextWrapping="Wrap" MinHeight="20"/>
+
+											<Button Content="Принять на склад" Command="{Binding ReturnEquipmentCommand}" Background="#FF9500" Foreground="Black" Height="40" HorizontalContentAlignment="Center" FontWeight="Bold" CornerRadius="5"/>
+										</StackPanel>
+									</Border>
+								</Grid>
+
+							</StackPanel>
+						</ScrollViewer>
 
 						<!-- Вкладка 2: Отчеты -->
 						<Grid RowDefinitions="Auto, *">
